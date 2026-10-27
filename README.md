@@ -1,2 +1,2 @@
 # Spider-Quadreped
-Spider inspired quadreped that walks around, has an OLED display, and likes to wave at people.
+Spider inspired quadruped that walks around, has an OLED display with a cute smile, and likes to wave at people.
