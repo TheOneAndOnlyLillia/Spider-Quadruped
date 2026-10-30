@@ -51,13 +51,18 @@ const int bl_shoulder_angle = 10;
 const int bl_middle_angle   = 50;
 const int bl_tibia_angle    = 110;
 
-const int fr_shoulder_angle = 40;
+const int fr_shoulder_angle = 80;
 const int fr_middle_angle   = 150;
 const int fr_tibia_angle    = 90;
 
 const int br_shoulder_angle = 80;
 const int br_middle_angle   = 50;
 const int br_tibia_angle    = 120;
+
+const int fl_middle_sit = 100;
+const int fr_middle_sit = 60;
+const int bl_middle_sit = 70;
+const int br_middle_sit = 80;
 
 const int fl_tibia_wave_up = 50;
 const int fl_tibia_wave_down = 90;
@@ -215,23 +220,8 @@ void sit() {
   moveAllMiddlesSmooth(middle_home, sit_angles, show_steps, show_step_ms);
 }
 
-void bounceFromBase(const int base[4], int amount, int times) {
-  int down[4];
-  for (int i = 0; i < 4; i++) down[i] = base[i] - middle_up_sign[i] * amount;
 
-  for (int t = 0; t < times; t++) {
-    moveAllMiddlesSmooth(base, down, show_steps, show_step_ms);
-    moveAllMiddlesSmooth(down, base, show_steps, show_step_ms);
-  }
-}
 
-void rockFromBase(const int base[4], int amount, int times) {
-  int leanLeft[4];
-  int leanRight[4];
-  for (int i = 0; i < 4; i++) {
-    leanLeft[i]  = base[i];
-    leanRight[i] = base[i];
-  }
 
   leanLeft[0] = base[0] - middle_up_sign[0] * amount;
   leanLeft[1] = base[1] - middle_up_sign[1] * amount;
@@ -252,24 +242,9 @@ void rockFromBase(const int base[4], int amount, int times) {
   }
 }
 
-void bowFromBase(const int base[4]) {
-  int down[4];
-  for (int i = 0; i < 4; i++) down[i] = base[i];
-  down[0] = base[0] - middle_up_sign[0] * bow_amount;
-  down[2] = base[2] - middle_up_sign[2] * bow_amount;
 
-  moveAllMiddlesSmooth(base, down, show_steps, show_step_ms);
-  delay(600);
-  moveAllMiddlesSmooth(down, base, show_steps, show_step_ms);
-}
 
-void shoulderWiggle(int amount, int times) {
-  int fwd[4];
-  int back[4];
-  for (int i = 0; i < 4; i++) {
-    fwd[i]  = shoulder_home[i] + shoulder_fwd_sign[i] * amount;
-    back[i] = shoulder_home[i] - shoulder_fwd_sign[i] * amount;
-  }
+
 
   for (int t = 0; t < times; t++) {
     moveAllShouldersSmooth(fwd, show_steps, show_step_ms);
@@ -316,25 +291,7 @@ void showHappyFace() {
   delay(250);
 }
 
-void performShow() {
-  standHome();
-  delay(800);
 
-  sit();
-  delay(800);
-
-  showHappyFace();
-  wave();
-
-  shoulderWiggle(shoulder_wiggle_size, 3);
-  rockFromBase(sit_angles, sit_rock_amount, 2);
-  bounceFromBase(sit_angles, sit_bounce_amount, 3);
-  bowFromBase(sit_angles);
-
-  delay(600);
-  standHome();
-  delay(1500);
-}
 
 void setup() {
   Serial.begin(9600);
@@ -351,9 +308,5 @@ void setup() {
 }
 
 void loop() {
-  if (table_mode) {
-    performShow();
-  } else {
-    walkForward();
-  }
+  walkForward();
 }
